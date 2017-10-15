@@ -1,7 +1,6 @@
 #include "server.hh"
 
 #include <csignal>
-#include <iostream>
 
 #include "Connection.hh"
 
@@ -46,9 +45,7 @@ void http::server::do_accept() {
       }
 
       if(!ec) {
-        std::cout << "Connection made, passing off" << std::endl;
         connection_manager.start(std::make_shared<Connection>(
-                                   connection_manager,
                                    std::move(socket)
                                  ));
       }

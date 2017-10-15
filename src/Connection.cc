@@ -1,30 +1,25 @@
 #include "Connection.hh"
 
-#include <iostream>
-
 #include "RequestParser.hh"
 
 namespace http{
 
-Connection::Connection(ConnectionManager& connection_manager,
-                             asio::ip::tcp::socket socket)
-  : connection_manager(connection_manager), socket(std::move(socket)) { }
+Connection::Connection(asio::ip::tcp::socket socket)
+  : socket(std::move(socket)) { }
 
 void Connection::start() {
-  std::cout << "Starting connection's first do_read" << std::endl;
   do_read();
 }
 
 void Connection::stop() {
-  std::cout << "Closing connection" << std::endl;
   socket.close();
 }
 
 void Connection::do_read() {
-  auto shared_this = shared_from_this();
+  auto keep_alive = shared_from_this();
   socket.async_read_some(
     asio::buffer(buffer),
-    [this, shared_this](std::error_code ec, std::size_t bytes_transferred) {
+    [this, keep_alive](std::error_code ec, std::size_t bytes_transferred) {
       if(!ec) {
 
         std::string data_received(buffer.data(), bytes_transferred);
@@ -35,30 +30,31 @@ void Connection::do_read() {
           do_write();
         } else if(request.parse_result == bad) {
           // TODO: Some stock response to bad requests.
+          // reply = gen_response();
           // do_write();
         } else {
           do_read();
         }
 
-      } else if (ec != asio::error::operation_aborted) {
-        connection_manager.stop(shared_from_this());
+      } else if (ec != asio::error::operation_aborted && on_close) {
+        on_close(this);
       }
     });
 }
 
 void Connection::do_write() {
-  auto shared_this = shared_from_this();
+  auto keep_alive = shared_from_this();
   asio::async_write(
     socket, reply.asio_buffers(),
-    [this, shared_this](std::error_code ec, std::size_t /*bytes_transferred*/) {
+    [this, keep_alive](std::error_code ec, std::size_t /*bytes_transferred*/) {
       if(!ec) {
         std::error_code ignored_ec;
         socket.shutdown(asio::ip::tcp::socket::shutdown_both,
                         ignored_ec);
       }
 
-      if(ec != asio::error::operation_aborted) {
-        connection_manager.stop(shared_this);
+      if(ec != asio::error::operation_aborted && on_close) {
+        on_close(this);
       }
     });
 }

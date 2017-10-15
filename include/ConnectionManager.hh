@@ -4,9 +4,9 @@
 #include <memory>
 #include <set>
 
-namespace http {
-  class Connection;
+#include "Connection.hh"
 
+namespace http {
   class ConnectionManager {
   public:
     ConnectionManager(const ConnectionManager&) = delete;
@@ -15,7 +15,6 @@ namespace http {
     ConnectionManager() { }
 
     void start(std::shared_ptr<Connection> conn);
-    void stop(std::shared_ptr<Connection> conn);
 
     void stop_all();
 

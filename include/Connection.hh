@@ -2,11 +2,11 @@
 #define _CONNECTION_H_
 
 #include <array>
+#include <functional>
 #include <memory>
 
 #include "asio.hpp"
 
-#include "ConnectionManager.hh"
 #include "Reply.hh"
 #include "Request.hh"
 
@@ -16,11 +16,14 @@ namespace http {
     Connection(const Connection&) = delete;
     Connection& operator=(const Connection&) = delete;
 
-    Connection(ConnectionManager& connection_manager,
-               asio::ip::tcp::socket socket);
+    Connection(asio::ip::tcp::socket socket);
 
     void start();
     void stop();
+
+    void set_on_close(std::function<void(Connection*)> callback) {
+      on_close = callback;
+    }
 
   private:
     void do_read();
@@ -28,7 +31,8 @@ namespace http {
 
     Reply handle_request(const Request& request);
 
-    ConnectionManager& connection_manager;
+    std::function<void(Connection*)> on_close;
+
     asio::ip::tcp::socket socket;
 
     std::array<char, 8192> buffer;
