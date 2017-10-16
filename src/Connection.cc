@@ -4,8 +4,9 @@
 
 namespace http{
 
-Connection::Connection(asio::ip::tcp::socket socket)
-  : socket(std::move(socket)) { }
+Connection::Connection(asio::ip::tcp::socket socket,
+                       std::function<Reply(Request)> generate_reply)
+  : socket(std::move(socket)), generate_reply(generate_reply) { }
 
 void Connection::start() {
   do_read();
@@ -26,7 +27,7 @@ void Connection::do_read() {
         Request request = parse_request(buffer.data(), buffer.data()+bytes_transferred);
 
         if(request.parse_result == good) {
-          reply = handle_request(request);
+          reply = generate_reply(request);
           do_write();
         } else if(request.parse_result == bad) {
           // TODO: Some stock response to bad requests.
@@ -57,22 +58,6 @@ void Connection::do_write() {
         on_close(this);
       }
     });
-}
-
-Reply Connection::handle_request(const Request& request) {
-  Reply reply;
-
-  reply.response_code = Reply::ok;
-  reply.content = "Test data here";
-
-  reply.headers.resize(2);
-
-  reply.headers[0].name = "Content-Length";
-  reply.headers[0].value = std::to_string(reply.content.size());
-  reply.headers[1].name = "Content-Type";
-  reply.headers[1].value = "text/html";
-
-  return reply;
 }
 
 }

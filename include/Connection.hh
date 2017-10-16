@@ -17,10 +17,8 @@ namespace http {
     Connection(const Connection&) = delete;
     Connection& operator=(const Connection&) = delete;
 
-    Connection(asio::ip::tcp::socket socket);
-    ~Connection() {
-      std::cout << __PRETTY_FUNCTION__ << std::endl;
-    }
+    Connection(asio::ip::tcp::socket socket,
+               std::function<Reply(Request)> generate_reply);
 
     void start();
     void stop();
@@ -33,11 +31,10 @@ namespace http {
     void do_read();
     void do_write();
 
-    Reply handle_request(const Request& request);
+    asio::ip::tcp::socket socket;
 
     std::function<void(Connection*)> on_close;
-
-    asio::ip::tcp::socket socket;
+    std::function<Reply(Request)> generate_reply;
 
     std::array<char, 8192> buffer;
     Reply reply;
