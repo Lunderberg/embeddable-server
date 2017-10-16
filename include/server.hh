@@ -1,6 +1,7 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
 
+#include <map>
 #include <string>
 
 #include "asio.hpp"
@@ -17,6 +18,8 @@ namespace http {
 
     void run();
 
+    void stop_all();
+
   private:
     void do_wait_for_signal();
     void do_accept();
@@ -26,7 +29,7 @@ namespace http {
     asio::ip::tcp::acceptor acceptor;
     asio::ip::tcp::socket socket;
 
-    ConnectionManager connection_manager;
+    std::map<Connection*, std::shared_ptr<Connection> > connections;
   };
 }
 

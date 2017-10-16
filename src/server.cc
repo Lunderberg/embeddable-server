@@ -33,7 +33,7 @@ void http::server::do_wait_for_signal() {
   signals.async_wait(
     [this](std::error_code ec, int signo) {
       acceptor.close();
-      connection_manager.stop_all();
+      stop_all();
     });
 }
 
@@ -45,11 +45,22 @@ void http::server::do_accept() {
       }
 
       if(!ec) {
-        connection_manager.start(std::make_shared<Connection>(
-                                   std::move(socket)
-                                 ));
+        auto new_conn = std::make_shared<Connection>(std::move(socket));
+        connections[new_conn.get()] = new_conn;
+        new_conn->set_on_close([this](Connection* conn) {
+            connections.erase(conn);
+            conn->stop();
+          });
+        new_conn->start();
       }
 
       do_accept();
     });
+}
+
+void http::server::stop_all() {
+  for(auto& conn : connections) {
+    conn.second->stop();
+  }
+  connections.clear();
 }

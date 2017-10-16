@@ -3,6 +3,7 @@
 
 #include <array>
 #include <functional>
+#include <iostream>
 #include <memory>
 
 #include "asio.hpp"
@@ -17,6 +18,9 @@ namespace http {
     Connection& operator=(const Connection&) = delete;
 
     Connection(asio::ip::tcp::socket socket);
+    ~Connection() {
+      std::cout << __PRETTY_FUNCTION__ << std::endl;
+    }
 
     void start();
     void stop();
