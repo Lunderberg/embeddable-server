@@ -1,5 +1,6 @@
 #include "Connection.hh"
 
+#include "CommonReplies.hh"
 #include "RequestParser.hh"
 
 namespace http{
@@ -30,9 +31,8 @@ void Connection::do_read() {
           reply = generate_reply(request);
           do_write();
         } else if(request.parse_result == bad) {
-          // TODO: Some stock response to bad requests.
-          // reply = gen_response();
-          // do_write();
+          reply = common_reply(Reply::bad_request);
+          do_write();
         } else {
           do_read();
         }
