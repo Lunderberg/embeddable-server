@@ -29,7 +29,6 @@ Reply FileServer::operator()(Request request) {
   reply.content.assign(std::istreambuf_iterator<char>(in),
                        std::istreambuf_iterator<char>());
 
-  reply.headers["Content-Length"] = std::to_string(reply.content.size());
   reply.headers["Content-Type"] = info.mime_type;
 
   return reply;

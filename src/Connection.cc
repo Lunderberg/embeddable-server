@@ -27,15 +27,19 @@ void Connection::do_read() {
         std::string data_received(buffer.data(), bytes_transferred);
         Request request = parse_request(buffer.data(), buffer.data()+bytes_transferred);
 
+        if(request.parse_result != good and request.parse_result != bad) {
+          do_read();
+          return;
+        }
+
         if(request.parse_result == good) {
           reply = generate_reply(request);
-          do_write();
         } else if(request.parse_result == bad) {
           reply = common_reply(Reply::bad_request);
-          do_write();
-        } else {
-          do_read();
         }
+
+        reply.headers["Content-Length"] = std::to_string(reply.content.size());
+        do_write();
 
       } else if (ec != asio::error::operation_aborted && on_close) {
         on_close(this);
