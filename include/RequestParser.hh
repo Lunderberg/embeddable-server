@@ -53,6 +53,8 @@ private:
   };
 
   State state;
+  std::string current_header_key;
+  std::string current_header_value;
 };
 
 template<typename InputIterator>

@@ -187,6 +187,8 @@ parse_result_type RequestParser::consume(char input) {
       break;
 
     case header_line_start:
+      current_header_key.clear();
+      current_header_value.clear();
       if(input == '\r') {
         state = expecting_newline_3;
         return indeterminate;
@@ -196,8 +198,7 @@ parse_result_type RequestParser::consume(char input) {
       } else if(!is_regular(input)) {
         return bad;
       } else {
-        output.headers.push_back(Header());
-        output.headers.back().name.push_back(input);
+        current_header_key.push_back(input);
         state = header_name;
         return indeterminate;
       }
@@ -213,7 +214,7 @@ parse_result_type RequestParser::consume(char input) {
         return bad;
       } else {
         state = header_value;
-        output.headers.back().value.push_back(input);
+        current_header_key.push_back(input);
         return indeterminate;
       }
       break;
@@ -225,7 +226,7 @@ parse_result_type RequestParser::consume(char input) {
       } else if(!is_regular(input)) {
         return bad;
       } else {
-        output.headers.back().name.push_back(input);
+        current_header_key.push_back(input);
         return indeterminate;
       }
       break;
@@ -241,12 +242,19 @@ parse_result_type RequestParser::consume(char input) {
 
     case header_value:
       if(input == '\r') {
+        if(output.headers.count(current_header_key)) {
+          output.headers[current_header_key] = (output.headers[current_header_key] +
+                                                ", " +
+                                                current_header_value);
+        } else {
+          output.headers[current_header_key] = current_header_value;
+        }
         state = expecting_newline_2;
         return indeterminate;
       } else if(is_ascii_control(input)) {
         return bad;
       } else {
-        output.headers.back().value.push_back(input);
+        current_header_value.push_back(input);
         return indeterminate;
       }
       break;

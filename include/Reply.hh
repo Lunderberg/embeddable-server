@@ -1,11 +1,11 @@
 #ifndef _REPLY_H_
 #define _REPLY_H_
 
+#include <map>
+#include <string>
 #include <vector>
 
 #include "asio.hpp"
-
-#include "Header.hh"
 
 namespace http {
 
@@ -29,7 +29,7 @@ struct Reply {
     service_unavailable = 503
   } response_code;
 
-  std::vector<Header> headers;
+  std::map<std::string, std::string> headers;
 
   std::string content;
 

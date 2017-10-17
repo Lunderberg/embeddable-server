@@ -2,10 +2,9 @@
 #define _REQUEST_H_
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
-
-#include "Header.hh"
 
 namespace http {
 
@@ -17,7 +16,7 @@ struct Request {
   std::string uri;
   int http_version_major = 0;
   int http_version_minor = 0;
-  std::vector<Header> headers;
+  std::map<std::string, std::string> headers;
 };
 
 std::ostream& operator<<(std::ostream& out, parse_result_type res);

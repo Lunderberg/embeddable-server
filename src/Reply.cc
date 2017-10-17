@@ -75,9 +75,9 @@ std::vector<asio::const_buffer> Reply::asio_buffers() {
   bufs.push_back(response_code_to_buf(response_code));
 
   for(const auto& head : headers) {
-    bufs.push_back(asio::buffer(head.name));
+    bufs.push_back(asio::buffer(head.first));
     bufs.push_back(header_sep());
-    bufs.push_back(asio::buffer(head.value));
+    bufs.push_back(asio::buffer(head.second));
     bufs.push_back(endline());
   }
   bufs.push_back(endline());

@@ -30,10 +30,7 @@ std::ostream& operator<<(std::ostream& out, const Request& res) {
       << " HTTP/" << res.http_version_major << "." << res.http_version_minor << "\n";
 
   for(const auto& header : res.headers) {
-    out << header.name << ": " << header.value;
-    if(&header != &res.headers.back()) {
-      out << "\n";
-    }
+    out << header.first << ": " << header.second << "\n";
   }
 
   return out;

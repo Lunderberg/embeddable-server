@@ -41,11 +41,9 @@ Reply common_reply(Reply::ResponseCode code) {
 
   output.response_code = code;
   output.content = ss.str();
-  output.headers.resize(2);
-  output.headers[0].name = "Content-Length";
-  output.headers[0].value = std::to_string(output.content.size());
-  output.headers[1].name = "Content-Type";
-  output.headers[1].name = "text/html";
+
+  output.headers["Content-Length"] = std::to_string(output.content.size());
+  output.headers["Content-Type"] = "text/html";
 
   return output;
 }
