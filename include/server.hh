@@ -6,8 +6,13 @@
 #include "asio.hpp"
 
 #include "http_server.hh"
-#include "https_server.hh"
 #include "server_opts.hh"
+
+#ifdef EWEB_ENABLE_SSL
+#include "https_server.hh"
+#else
+#include "https_server_dummy.hh"
+#endif
 
 namespace eweb {
 

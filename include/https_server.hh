@@ -15,6 +15,8 @@
 namespace eweb {
 class https_server {
 public:
+  enum { enabled = 1 };
+
   typedef asio::ssl::stream<asio::ip::tcp::socket> socket_t;
 
   https_server(
