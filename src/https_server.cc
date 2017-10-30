@@ -3,7 +3,6 @@
 #include <csignal>
 
 #include "Connection.hh"
-#include "FileServer.hh"
 
 namespace eweb {
 

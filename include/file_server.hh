@@ -8,9 +8,9 @@
 
 namespace eweb {
 
-class FileServer {
+class file_server {
 public:
-  FileServer(std::string root_path);
+  file_server(std::string root_path);
 
   Reply operator()(Request request);
 

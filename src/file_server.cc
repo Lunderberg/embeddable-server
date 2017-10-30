@@ -1,4 +1,4 @@
-#include "FileServer.hh"
+#include "file_server.hh"
 
 #include <fstream>
 
@@ -7,10 +7,10 @@
 
 namespace eweb {
 
-FileServer::FileServer(std::string root_path)
+file_server::file_server(std::string root_path)
   : root_path(root_path) { }
 
-Reply FileServer::operator()(Request request) {
+Reply file_server::operator()(Request request) {
   URIInfo info(request.uri);
 
   if(!info.is_valid) {
