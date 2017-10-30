@@ -8,6 +8,7 @@
 
 #include "Response.hh"
 #include "Request.hh"
+#include "get_password_stdin.hh"
 
 namespace eweb {
 
@@ -74,6 +75,25 @@ public:
     return *this;
   }
 
+  /// The file containing SSL setup for the server.
+  /**
+     Should be a PEM format file containing the encrypted private SSL
+     key, the signed certificate, and Diffie-Hellman parameters.
+   */
+  server_opts& ssl_file(std::string filename) {
+    server_file_ = filename;
+    return *this;
+  }
+
+  /// A function to return the encryption key for the private SSL key.
+  /**
+     Defaults to asking the user for the password on stdin.
+   */
+  server_opts& ssl_password_function(std::function<std::string()> getter) {
+    get_server_password = getter;
+    return *this;
+  }
+
   /// The io_service to run on.
   /**
      If specified here, the server will use an existing
@@ -94,12 +114,16 @@ private:
   friend class server;
 
   std::string bind_to_address = "localhost";
-  int http_listen_port = 80;
-  int https_listen_port = 443;
-  std::function<Response(Request)> http_generator;
-  std::function<Response(Request)> https_generator;
-  asio::io_service* io_service_to_use;
+  asio::io_service* io_service_to_use = nullptr;
   bool close_server_on_sigint = true;
+
+  std::function<Response(Request)> http_generator;
+  int http_listen_port = 80;
+
+  std::function<Response(Request)> https_generator;
+  int https_listen_port = 443;
+  std::string server_file_ = "server.pem";
+  std::function<std::string()> get_server_password = get_password_stdin;
 };
 
 

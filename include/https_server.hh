@@ -10,22 +10,27 @@
 #include "Connection.hh"
 #include "Response.hh"
 #include "Request.hh"
+#include "get_password_stdin.hh"
 
 namespace eweb {
 class https_server {
 public:
   typedef asio::ssl::stream<asio::ip::tcp::socket> socket_t;
 
-  https_server(asio::io_service& io_service,
-               std::string address, std::string port,
-               std::function<Response(Request)> generator)
+  https_server(
+    asio::io_service& io_service,
+    std::string address, std::string port,
+    std::function<Response(Request)> generator,
+    std::string server_file,
+    std::function<std::string()> get_password = get_password_stdin)
+
     : io_service(io_service),
       acceptor(io_service),
       context(io_service, asio::ssl::context::sslv23),
       socket(nullptr),
       generator(generator)
     {
-      generate_context();
+      setup_context(server_file, get_password);
 
       asio::ip::tcp::resolver resolver(io_service);
       asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
@@ -81,25 +86,19 @@ private:
     new_conn->start();
   }
 
-  std::string get_password() {
-    return "password";
-  }
-
-  asio::ssl::context& generate_context() {
+  void setup_context(std::string server_file, std::function<std::string()> get_password) {
     context.set_options(
       asio::ssl::context::default_workarounds |
       asio::ssl::context::no_sslv2 |
       asio::ssl::context::single_dh_use);
     context.set_password_callback(
-      [this](size_t /*max_length*/,
+      [=](size_t /*max_length*/,
              asio::ssl::context::password_purpose /*purpose*/) {
         return get_password();
       });
-    context.use_certificate_chain_file("server.pem");
-    context.use_private_key_file("server.pem", asio::ssl::context::pem);
-    context.use_tmp_dh_file("server.pem");
-
-    return context;
+    context.use_certificate_chain_file(server_file);
+    context.use_private_key_file(server_file, asio::ssl::context::pem);
+    context.use_tmp_dh_file(server_file);
   }
 
   asio::io_service& io_service;
