@@ -1,5 +1,12 @@
+# Emacs temporary and autosave
 *~
+\#*\#
+.\#*
+
+# Build artifacts
 build
 bin
 .sconsign.dblite
+
+# SSL keys
 server.pem

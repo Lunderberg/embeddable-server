@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace http {
+namespace eweb {
 
 enum parse_result_type { good, bad, indeterminate };
 

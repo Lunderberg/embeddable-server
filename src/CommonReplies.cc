@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace http {
+namespace eweb {
 
 Reply common_reply(Reply::ResponseCode code) {
   std::string error;

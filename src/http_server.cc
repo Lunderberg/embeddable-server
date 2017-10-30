@@ -5,7 +5,7 @@
 #include "Connection.hh"
 #include "FileServer.hh"
 
-namespace http {
+namespace eweb {
 
 http_server::http_server(asio::io_service& io_service,
                std::string address, std::string port,

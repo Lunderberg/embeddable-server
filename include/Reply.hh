@@ -7,7 +7,7 @@
 
 #include "asio.hpp"
 
-namespace http {
+namespace eweb {
 
 struct Reply {
   enum ResponseCode {

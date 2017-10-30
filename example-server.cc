@@ -17,8 +17,8 @@ int main(int argc, char** argv) {
 
     asio::io_service io_service;
 
-    http::http_server http_server(io_service, "localhost", "12345", http::FileServer("."));
-    http::https_server https_server(io_service, "localhost", "12346", http::FileServer("."));
+    eweb::http_server http_server(io_service, "localhost", "12345", eweb::FileServer("."));
+    eweb::https_server https_server(io_service, "localhost", "12346", eweb::FileServer("."));
 
     asio::signal_set signals(io_service);
     signals.add(SIGINT);

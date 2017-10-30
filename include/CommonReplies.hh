@@ -3,7 +3,7 @@
 
 #include "Reply.hh"
 
-namespace http {
+namespace eweb {
 
 Reply common_reply(Reply::ResponseCode code);
 

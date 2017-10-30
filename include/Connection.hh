@@ -13,7 +13,7 @@
 #include "Request.hh"
 #include "RequestParser.hh"
 
-namespace http {
+namespace eweb {
 
 template<typename SocketType>
 class Connection : public std::enable_shared_from_this<Connection<SocketType> > {

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-namespace http {
+namespace eweb {
 
 struct URIInfo {
   URIInfo(const std::string& request);

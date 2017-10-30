@@ -5,7 +5,7 @@
 #include "CommonReplies.hh"
 #include "URIInfo.hh"
 
-namespace http {
+namespace eweb {
 
 FileServer::FileServer(std::string root_path)
   : root_path(root_path) { }

@@ -11,7 +11,7 @@
 #include "Reply.hh"
 #include "Request.hh"
 
-namespace http {
+namespace eweb {
   class http_server {
     typedef asio::ip::tcp::socket socket_t;
     //typedef asio::ssl::stream<asio::ip::tcp::socket> ssl_socket;

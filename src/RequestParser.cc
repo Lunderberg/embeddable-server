@@ -48,7 +48,7 @@ bool is_regular(int c) {
 
 }
 
-namespace http {
+namespace eweb {
 
 parse_result_type RequestParser::consume(char input) {
   switch(state) {

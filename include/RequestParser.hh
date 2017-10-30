@@ -3,7 +3,7 @@
 
 #include "Request.hh"
 
-namespace http {
+namespace eweb {
 
 class RequestParser {
 public:

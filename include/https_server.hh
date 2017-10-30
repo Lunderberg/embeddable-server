@@ -12,7 +12,7 @@
 #include "Reply.hh"
 #include "Request.hh"
 
-namespace http {
+namespace eweb {
   class https_server {
   public:
     typedef asio::ssl::stream<asio::ip::tcp::socket> socket_t;

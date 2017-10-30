@@ -1,6 +1,6 @@
 #include "Request.hh"
 
-namespace http {
+namespace eweb {
 
 std::ostream& operator<<(std::ostream& out, parse_result_type res) {
   switch(res) {

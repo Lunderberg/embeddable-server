@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace http {
+namespace eweb {
 
 URIInfo::URIInfo(const std::string& request)
   : is_valid(true) {

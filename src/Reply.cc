@@ -1,6 +1,6 @@
 #include "Reply.hh"
 
-namespace http {
+namespace eweb {
 
 static asio::const_buffer response_code_to_buf(Reply::ResponseCode response_code) {
   static const std::string ok = "HTTP/1.0 200 OK\r\n";
