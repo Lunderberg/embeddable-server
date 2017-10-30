@@ -1,14 +1,10 @@
 #include "https_server.hh"
 
-#include <csignal>
-
-#include "Connection.hh"
-
 namespace eweb {
 
 https_server::https_server(asio::io_service& io_service,
                std::string address, std::string port,
-               std::function<Reply(Request)> generator)
+               std::function<Response(Request)> generator)
   : io_service(io_service),
     acceptor(io_service),
     context(io_service, asio::ssl::context::sslv23),

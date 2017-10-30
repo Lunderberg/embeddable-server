@@ -9,7 +9,7 @@
 #include <asio/ssl.hpp>
 
 #include "Connection.hh"
-#include "Reply.hh"
+#include "Response.hh"
 #include "Request.hh"
 
 namespace eweb {
@@ -19,7 +19,7 @@ namespace eweb {
 
     https_server(asio::io_service& io_service,
                  std::string address, std::string port,
-                 std::function<Reply(Request)> generator);
+                 std::function<Response(Request)> generator);
 
     void run();
     void stop_all();
@@ -40,7 +40,7 @@ namespace eweb {
     asio::ssl::context context;
     std::unique_ptr<socket_t> socket;
 
-    std::function<Reply(Request)> generator;
+    std::function<Response(Request)> generator;
     std::set<std::shared_ptr<Connection<socket_t> > > connections;
   };
 }

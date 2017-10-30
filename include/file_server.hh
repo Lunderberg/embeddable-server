@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Reply.hh"
+#include "Response.hh"
 #include "Request.hh"
 
 namespace eweb {
@@ -12,7 +12,7 @@ class file_server {
 public:
   file_server(std::string root_path);
 
-  Reply operator()(Request request);
+  Response operator()(Request request);
 
 private:
   std::string root_path;

@@ -6,7 +6,7 @@
 
 #include "asio.hpp"
 
-#include "Reply.hh"
+#include "Response.hh"
 #include "Request.hh"
 
 namespace eweb {
@@ -47,7 +47,7 @@ public:
   /**
      If unspecified, the http server will not run.
    */
-  server_opts& http_callback(std::function<Reply(Request)> gen) {
+  server_opts& http_callback(std::function<Response(Request)> gen) {
     http_generator = gen;
     return *this;
   }
@@ -60,7 +60,7 @@ public:
      enabled with the -DEWEB_ENABLE_SSL, constructor of eweb::server
      will throw.
    */
-  server_opts& https_callback(std::function<Reply(Request)> gen) {
+  server_opts& https_callback(std::function<Response(Request)> gen) {
     https_generator = gen;
     return *this;
   }
@@ -96,8 +96,8 @@ private:
   std::string bind_to_address = "localhost";
   int http_listen_port = 80;
   int https_listen_port = 443;
-  std::function<Reply(Request)> http_generator;
-  std::function<Reply(Request)> https_generator;
+  std::function<Response(Request)> http_generator;
+  std::function<Response(Request)> https_generator;
   asio::io_service* io_service_to_use;
   bool close_server_on_sigint = true;
 };

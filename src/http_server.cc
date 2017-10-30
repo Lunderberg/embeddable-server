@@ -8,7 +8,7 @@ namespace eweb {
 
 http_server::http_server(asio::io_service& io_service,
                std::string address, std::string port,
-               std::function<Reply(Request)> generator)
+               std::function<Response(Request)> generator)
   : io_service(io_service),
     acceptor(io_service),
     socket(nullptr),

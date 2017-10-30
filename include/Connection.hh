@@ -8,8 +8,8 @@
 
 #include "asio.hpp"
 
-#include "CommonReplies.hh"
-#include "Reply.hh"
+#include "CommonResponses.hh"
+#include "Response.hh"
 #include "Request.hh"
 #include "RequestParser.hh"
 
@@ -19,8 +19,8 @@ template<typename SocketType>
 class Connection : public std::enable_shared_from_this<Connection<SocketType> > {
 public:
   Connection(std::unique_ptr<SocketType> socket,
-             std::function<Reply(Request)> generate_reply)
-    : socket(std::move(socket)), generate_reply(generate_reply) { }
+             std::function<Response(Request)> generate_response)
+    : socket(std::move(socket)), generate_response(generate_response) { }
 
   void start() { init(); }
   void stop() { socket->lowest_layer().close(); }
@@ -50,12 +50,12 @@ private:
           }
 
           if(request.parse_result == good) {
-            reply = generate_reply(request);
+            response = generate_response(request);
           } else if(request.parse_result == bad) {
-            reply = common_reply(Reply::bad_request);
+            response = common_response(Response::bad_request);
           }
 
-          reply.headers["Content-Length"] = std::to_string(reply.content.size());
+          response.headers["Content-Length"] = std::to_string(response.content.size());
           do_write();
 
         } else if (ec != asio::error::operation_aborted && on_close) {
@@ -68,7 +68,7 @@ private:
   void do_write() {
     auto keep_alive = this->shared_from_this();
     asio::async_write(
-      *socket, reply.asio_buffers(),
+      *socket, response.asio_buffers(),
       [this, keep_alive](std::error_code ec, std::size_t /*bytes_transferred*/) {
         if(!ec) {
           std::error_code ignored_ec;
@@ -85,10 +85,10 @@ private:
   std::unique_ptr<SocketType> socket;
 
   std::function<void()> on_close;
-  std::function<Reply(Request)> generate_reply;
+  std::function<Response(Request)> generate_response;
 
   std::array<char, 8192> buffer;
-  Reply reply;
+  Response response;
 };
 
 }

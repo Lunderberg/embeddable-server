@@ -1,11 +1,11 @@
 #ifndef _COMMONREPLIES_H_
 #define _COMMONREPLIES_H_
 
-#include "Reply.hh"
+#include "Response.hh"
 
 namespace eweb {
 
-Reply common_reply(Reply::ResponseCode code);
+Response common_response(Response::ResponseCode code);
 
 }
 

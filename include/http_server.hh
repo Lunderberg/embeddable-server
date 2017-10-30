@@ -8,7 +8,7 @@
 #include <asio.hpp>
 
 #include "Connection.hh"
-#include "Reply.hh"
+#include "Response.hh"
 #include "Request.hh"
 
 namespace eweb {
@@ -19,7 +19,7 @@ namespace eweb {
   public:
     http_server(asio::io_service& io_service,
                 std::string address, std::string port,
-                std::function<Reply(Request)> generator);
+                std::function<Response(Request)> generator);
 
     void run();
     void stop_all();
@@ -35,7 +35,7 @@ namespace eweb {
     asio::ip::tcp::acceptor acceptor;
     std::unique_ptr<socket_t> socket;
 
-    std::function<Reply(Request)> generator;
+    std::function<Response(Request)> generator;
     std::set<std::shared_ptr<Connection<socket_t> > > connections;
   };
 }

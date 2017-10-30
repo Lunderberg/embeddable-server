@@ -1,5 +1,5 @@
-#ifndef _REPLY_H_
-#define _REPLY_H_
+#ifndef _RESPONSE_H_
+#define _RESPONSE_H_
 
 #include <map>
 #include <string>
@@ -9,7 +9,7 @@
 
 namespace eweb {
 
-struct Reply {
+struct Response {
   enum ResponseCode {
     ok = 200,
     created = 201,
@@ -38,4 +38,4 @@ struct Reply {
 
 }
 
-#endif /* _REPLY_H_ */
+#endif /* _RESPONSE_H_ */

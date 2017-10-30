@@ -1,8 +1,8 @@
-#include "Reply.hh"
+#include "Response.hh"
 
 namespace eweb {
 
-static asio::const_buffer response_code_to_buf(Reply::ResponseCode response_code) {
+static asio::const_buffer response_code_to_buf(Response::ResponseCode response_code) {
   static const std::string ok = "HTTP/1.0 200 OK\r\n";
   static const std::string created = "HTTP/1.0 201 Created\r\n";
   static const std::string accepted = "HTTP/1.0 202 Accepted\r\n";
@@ -21,37 +21,37 @@ static asio::const_buffer response_code_to_buf(Reply::ResponseCode response_code
   static const std::string service_unavailable = "HTTP/1.0 503 Service Unavailable\r\n";
 
   switch(response_code) {
-    case Reply::ok:
+    case Response::ok:
       return asio::buffer(ok);
-    case Reply::created:
+    case Response::created:
       return asio::buffer(created);
-    case Reply::accepted:
+    case Response::accepted:
       return asio::buffer(accepted);
-    case Reply::no_content:
+    case Response::no_content:
       return asio::buffer(no_content);
-    case Reply::multiple_choices:
+    case Response::multiple_choices:
       return asio::buffer(multiple_choices);
-    case Reply::moved_permanently:
+    case Response::moved_permanently:
       return asio::buffer(moved_permanently);
-    case Reply::moved_temporarily:
+    case Response::moved_temporarily:
       return asio::buffer(moved_temporarily);
-    case Reply::not_modified:
+    case Response::not_modified:
       return asio::buffer(not_modified);
-    case Reply::bad_request:
+    case Response::bad_request:
       return asio::buffer(bad_request);
-    case Reply::unauthorized:
+    case Response::unauthorized:
       return asio::buffer(unauthorized);
-    case Reply::forbidden:
+    case Response::forbidden:
       return asio::buffer(forbidden);
-    case Reply::not_found:
+    case Response::not_found:
       return asio::buffer(not_found);
-    case Reply::internal_server_error:
+    case Response::internal_server_error:
       return asio::buffer(internal_server_error);
-    case Reply::not_implemented:
+    case Response::not_implemented:
       return asio::buffer(not_implemented);
-    case Reply::bad_gateway:
+    case Response::bad_gateway:
       return asio::buffer(bad_gateway);
-    case Reply::service_unavailable:
+    case Response::service_unavailable:
       return asio::buffer(service_unavailable);
 
     default:
@@ -69,7 +69,7 @@ static asio::const_buffer endline() {
   return asio::buffer(val);
 }
 
-std::vector<asio::const_buffer> Reply::asio_buffers() {
+std::vector<asio::const_buffer> Response::asio_buffers() {
   std::vector<asio::const_buffer> bufs;
 
   bufs.push_back(response_code_to_buf(response_code));
