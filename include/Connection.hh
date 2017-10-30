@@ -1,5 +1,4 @@
-#ifndef _CONNECTION_H_
-#define _CONNECTION_H_
+#pragma once
 
 #include <array>
 #include <functional>
@@ -92,5 +91,3 @@ private:
 };
 
 }
-
-#endif /* _CONNECTION_H_ */

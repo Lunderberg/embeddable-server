@@ -2,7 +2,7 @@
 
 #include "eweb.hh"
 
-int main(int argc, char** argv) {
+int main() {
   try {
     eweb::server server(eweb::server_opts()
                         .address("localhost")
