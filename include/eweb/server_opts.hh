@@ -1,5 +1,4 @@
-#ifndef _SERVER_OPTS_H_
-#define _SERVER_OPTS_H_
+#pragma once
 
 #include <functional>
 #include <string>
@@ -142,5 +141,3 @@ private:
 
 
 }
-
-#endif /* _SERVER_OPTS_H_ */

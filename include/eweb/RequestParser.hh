@@ -1,5 +1,4 @@
-#ifndef _REQUESTPARSER_H_
-#define _REQUESTPARSER_H_
+#pragma once
 
 #include "Request.hh"
 #include "parser_helpers.hh"
@@ -295,5 +294,3 @@ Request parse_request(InputIterator begin, InputIterator end) {
 }
 
 }
-
-#endif /* _REQUESTPARSER_H_ */

@@ -1,5 +1,4 @@
-#ifndef _RESPONSE_H_
-#define _RESPONSE_H_
+#pragma once
 
 #include <map>
 #include <string>
@@ -120,5 +119,3 @@ struct Response {
 };
 
 }
-
-#endif /* _RESPONSE_H_ */

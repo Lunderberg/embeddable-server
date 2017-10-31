@@ -1,8 +1,5 @@
-#ifndef _EWEB_H_
-#define _EWEB_H_
+#pragma once
 
-#include "server.hh"
-#include "file_server.hh"
-#include "https_redirect.hh"
-
-#endif /* _EWEB_H_ */
+#include "eweb/server.hh"
+#include "eweb/file_server.hh"
+#include "eweb/https_redirect.hh"

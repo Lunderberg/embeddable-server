@@ -1,5 +1,4 @@
-#ifndef _HTTP_SERVER_H_
-#define _HTTP_SERVER_H_
+#pragma once
 
 #include <functional>
 #include <set>
@@ -88,5 +87,3 @@ namespace eweb {
     std::set<std::shared_ptr<Connection<socket_t> > > connections;
   };
 }
-
-#endif /* _HTTP_SERVER_H_ */

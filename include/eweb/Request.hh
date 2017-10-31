@@ -1,5 +1,4 @@
-#ifndef _REQUEST_H_
-#define _REQUEST_H_
+#pragma once
 
 #include <iostream>
 #include <map>
@@ -54,5 +53,3 @@ inline std::ostream& operator<<(std::ostream& out, const Request& res) {
 }
 
 }
-
-#endif /* _REQUEST_H_ */
