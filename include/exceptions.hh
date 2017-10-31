@@ -12,4 +12,8 @@ struct ssl_disabled : public eweb_error {
   using eweb_error::eweb_error;
 };
 
+struct bad_server_config : public eweb_error {
+  using eweb_error::eweb_error;
+};
+
 }

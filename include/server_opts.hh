@@ -46,10 +46,23 @@ public:
 
   /// The callback used to generate http response.
   /**
-     If unspecified, the http server will not run.
+     If specified along with http_redirect_to_https, will throw.  If
+     neither this option nor http_redirect_to_https are specified,
+     http server will not run.
    */
   server_opts& http_callback(std::function<Response(Request)> gen) {
     http_generator = gen;
+    return *this;
+  }
+
+  /// Redirect http traffic to https.
+  /**
+     Redirect all traffic on http to https.  If specified along with
+     http_callback, will throw.  If neither this option nor
+     http_callback are specified, http server will not run.
+   */
+  server_opts& redirect_http_to_https(bool enable = true) {
+    redirect_http_to_https_ = enable;
     return *this;
   }
 
@@ -119,6 +132,7 @@ private:
 
   std::function<Response(Request)> http_generator;
   int http_listen_port = 80;
+  bool redirect_http_to_https_ = false;
 
   std::function<Response(Request)> https_generator;
   int https_listen_port = 443;

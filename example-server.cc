@@ -9,7 +9,7 @@ int main() {
 
     if(eweb::https_server::enabled) {
       config.http_port(12345);
-      config.http_callback(eweb::https_redirect(12346));
+      config.redirect_http_to_https();
       config.https_port(12346);
       config.https_callback(eweb::file_server("."));
 

@@ -5,7 +5,9 @@
 
 #include "asio.hpp"
 
+#include "exceptions.hh"
 #include "http_server.hh"
+#include "https_redirect.hh"
 #include "server_opts.hh"
 
 #ifdef EWEB_ENABLE_SSL
@@ -21,6 +23,12 @@ public:
   /// Initialize the server, using the options given.
   server(const server_opts& opts)
     : io_service(nullptr) {
+
+    if(opts.http_generator && opts.redirect_http_to_https_) {
+      throw bad_server_config("Cannot specify both http_callback "
+                              "and redirect_http_to_https");
+    }
+
     if(opts.io_service_to_use) {
       io_service = opts.io_service_to_use;
     } else {
@@ -38,12 +46,17 @@ public:
         });
     }
 
-    if(opts.http_generator) {
+    auto http_generator = opts.http_generator;
+    if(!http_generator && opts.redirect_http_to_https_) {
+      http_generator = https_redirect(opts.https_listen_port);
+    }
+
+    if(http_generator) {
       http = std::make_unique<http_server>(
         *io_service,
         opts.bind_to_address,
         std::to_string(opts.http_listen_port),
-        opts.http_generator);
+        http_generator);
     }
 
     if(opts.https_generator) {
