@@ -40,7 +40,7 @@ struct URIInfo {
     generate_mime_type();
 
     if(begin != end) {
-      parse_get_params(begin, end);
+      get_params = parse_query_string(begin, end);
     }
   }
 
@@ -48,7 +48,7 @@ struct URIInfo {
   std::string path;
   std::string extension;
   std::string mime_type;
-  std::map<std::string, std::string> get_params;
+  std::multimap<std::string, std::string> get_params;
 
 private:
   const char* parse_path(const char* begin, const char* end) {
@@ -794,7 +794,59 @@ private:
     }
   }
 
-  void parse_get_params(const char* begin, const char* end) { }
+  std::multimap<std::string, std::string> parse_query_string(const char* begin, const char* end) {
+    std::multimap<std::string, std::string> output;
+
+    std::string current_key;
+    std::string current_value;
+    std::string* current_str = &current_key;
+
+    while(begin < end) {
+      char c = *begin++;
+
+      if(c == '%') {
+        if(begin+2 >= end) {
+          return output;
+        }
+
+        int val = percent_decode(begin);
+        if(val == -1) {
+          return output;
+        }
+        *current_str += static_cast<char>(val);
+
+      } else if(c == '+') {
+        *current_str += ' ';
+
+      } else if(c == '=') {
+        if(current_str == &current_key) {
+          current_str = &current_value;
+        } else {
+          *current_str += '=';
+        }
+
+      } else if(c == '&') {
+        if(current_str == &current_value) {
+          output.insert({current_key, current_value});
+
+          current_key.clear();
+          current_value.clear();
+          current_str = &current_key;
+        } else {
+          *current_str += '&';
+        }
+
+      } else {
+        *current_str += c;
+      }
+    }
+
+    if(current_key.size()) {
+      output.insert({current_key, current_value});
+    }
+
+    return output;
+  }
 };
 
 }
