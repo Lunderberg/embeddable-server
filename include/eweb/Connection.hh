@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 
-#include "asio.hpp"
+#include "eweb_asio.hh"
 
 #include "CommonResponses.hh"
 #include "Response.hh"
@@ -37,7 +37,7 @@ private:
     auto keep_alive = this->shared_from_this();
     socket->async_read_some(
       asio::buffer(buffer),
-      [this, keep_alive](std::error_code ec, std::size_t bytes_transferred) {
+      [this, keep_alive](error_code ec, std::size_t bytes_transferred) {
         if(!ec) {
 
           std::string data_received(buffer.data(), bytes_transferred);
@@ -68,9 +68,9 @@ private:
     auto keep_alive = this->shared_from_this();
     asio::async_write(
       *socket, response.asio_buffers(),
-      [this, keep_alive](std::error_code ec, std::size_t /*bytes_transferred*/) {
+      [this, keep_alive](error_code ec, std::size_t /*bytes_transferred*/) {
         if(!ec) {
-          std::error_code ignored_ec;
+          error_code ignored_ec;
           socket->lowest_layer().shutdown(asio::ip::tcp::socket::shutdown_both,
                           ignored_ec);
         }

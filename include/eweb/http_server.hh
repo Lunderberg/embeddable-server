@@ -4,7 +4,7 @@
 #include <set>
 #include <string>
 
-#include <asio.hpp>
+#include "eweb_asio.hh"
 
 #include "Connection.hh"
 #include "Response.hh"
@@ -54,7 +54,7 @@ namespace eweb {
       }
 
       acceptor.async_accept(
-        *socket, [this](std::error_code ec) {
+        *socket, [this](error_code ec) {
           if(!acceptor.is_open()) {
             return;
           }

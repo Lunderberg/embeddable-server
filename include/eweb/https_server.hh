@@ -4,8 +4,8 @@
 #include <set>
 #include <string>
 
-#include <asio.hpp>
-#include <asio/ssl.hpp>
+#include "eweb_asio.hh"
+#include "eweb_asio_ssl.hh"
 
 #include "Connection.hh"
 #include "Response.hh"
@@ -63,7 +63,7 @@ private:
     }
 
     acceptor.async_accept(
-      socket->lowest_layer(), [this](std::error_code ec) {
+      socket->lowest_layer(), [this](error_code ec) {
         if(!acceptor.is_open()) {
           return;
         }

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "asio.hpp"
+#include "eweb_asio.hh"
 
 #include "exceptions.hh"
 #include "http_server.hh"
@@ -40,7 +40,7 @@ public:
       signals->add(SIGINT);
       signals->add(SIGTERM);
       signals->async_wait(
-        [this](std::error_code /*ec*/, int /*signo*/) {
+        [this](error_code /*ec*/, int /*signo*/) {
           close();
         });
     }
