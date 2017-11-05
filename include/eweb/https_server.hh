@@ -46,7 +46,7 @@ public:
 
   void stop_all() {
     for(auto& conn : connections) {
-      conn->stop();
+      conn.second->stop();
     }
     connections.clear();
   }
@@ -79,11 +79,12 @@ private:
   void setup_new_conn() {
     auto new_conn = std::make_shared<Connection<socket_t> >(
       std::move(socket), generator);
+    auto c_ptr = new_conn.get();
 
-    connections.insert(new_conn);
-    new_conn->set_on_close([this,new_conn]() {
-        connections.erase(new_conn);
-        new_conn->stop();
+    connections[c_ptr] = new_conn;
+    new_conn->set_on_close([this,c_ptr]() {
+        c_ptr->stop();
+        connections.erase(c_ptr);
       });
     new_conn->start();
   }
@@ -109,7 +110,8 @@ private:
   std::unique_ptr<socket_t> socket;
 
   std::function<Response(Request)> generator;
-  std::set<std::shared_ptr<Connection<socket_t> > > connections;
+  std::map<Connection<socket_t>*,
+           std::shared_ptr<Connection<socket_t> > > connections;
 };
 
 /// Alternate initialization for SSL sockets, to do handshake first.
